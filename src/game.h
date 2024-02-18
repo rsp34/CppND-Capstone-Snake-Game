@@ -21,8 +21,8 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
-  BadFood badFood;
-  std::thread badFoodTimer;
+  BadFood bad_food;
+  std::thread bad_food_timer;
 
   std::random_device dev;
   std::mt19937 engine;

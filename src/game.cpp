@@ -13,9 +13,9 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
 }
 
 Game::~Game() {
-    badFood.Cancel();
-    if (badFoodTimer.joinable()) {
-        badFoodTimer.join();
+    bad_food.Cancel();
+    if (bad_food_timer.joinable()) {
+        bad_food_timer.join();
     }
 }
 
@@ -35,7 +35,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, badFood);
+    renderer.Render(snake, food, bad_food);
 
     frame_end = SDL_GetTicks();
 
@@ -83,13 +83,13 @@ void Game::PlaceBadFood() {
         // Check that the location is not occupied by a snake item before placing
         // food.
         if (!snake.SnakeCell(x, y) && (x != food.x && y != food.y)) {
-            if (badFoodTimer.joinable())
+            if (bad_food_timer.joinable())
             {
-                badFood.Cancel();
-				badFoodTimer.join();
+                bad_food.Cancel();
+                bad_food_timer.join();
 			}
-            badFood.Place(x, y);
-            badFoodTimer = std::thread(&BadFood::BadFoodTimer, &badFood);
+            bad_food.Place(x, y);
+            bad_food_timer = std::thread(&BadFood::BadFoodTimer, &bad_food);
             return;
         }
     }
@@ -104,13 +104,13 @@ void Game::Update() {
     int new_y = static_cast<int>(snake.head_y);
 
     // Check if there's bad food over here
-    if (badFood.IsEaten(new_x, new_y))
+    if (bad_food.IsEaten(new_x, new_y))
     {
         score--;
 
-		badFood.Remove();
-        badFood.Cancel();
-        if (badFoodTimer.joinable()) badFoodTimer.join();
+		bad_food.Remove();
+        bad_food.Cancel();
+        if (bad_food_timer.joinable()) bad_food_timer.join();
 
         snake.GrowBody();
 		snake.speed += speed_increment;
@@ -124,7 +124,7 @@ void Game::Update() {
 
         // Place any more food
         PlaceFood();        
-        if (score > 0 && !badFood.IsActive())
+        if (score > 0 && !bad_food.IsActive())
         {
             PlaceBadFood();
 		}
