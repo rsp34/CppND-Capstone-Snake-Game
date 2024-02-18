@@ -86,7 +86,6 @@ In this project, you can build your own C++ application or extend this Snake gam
   - Add two player mode.
   - Add replay functionality to the game, storing the game state at each frame (or ever n frames) and then replaying the game from the start. Admittedly, you could just record the snakes's position and the food's position and then replay the game from the start.
 
-	- 
 ## Project Rubric
 
 ### README (All Rubric Points REQUIRED)
